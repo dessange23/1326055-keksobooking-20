@@ -41,7 +41,7 @@ var createNewObj = function (avatar, title, address, price, type, rooms, guests,
 
 
 var createArrObjects = function (arrLength, avatarProp, titleProp, addressProp, priceProp, typeProp, roomsProp, guestsProp, checkinProp, checkoutProp, featuresProp, descriptionProp, photosProp) {
-  for (var i = 0; i < arrLength; i += 1) {
+  for (var i = 0; i < arrLength; i++) {
     var avatar = avatarProp[i];
     var title = titleProp[i];
     var address = addressProp[i];
