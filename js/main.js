@@ -1,62 +1,119 @@
 'use strict';
-var AVATAR = ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png',
-  'img/avatars/user07.png', 'img/avatars/user08.png'];
-var TITLE = ['отель1', 'отель2', 'отель3', 'отель4', 'отель5', 'отель6', 'отель7', 'отель8'];
-var ADDRESS = ['600 350', '500 400', '550 300', '630 340', '570 380', '620 380', '670 580', '550 330'];
-var PRICE = [200, 300, 400, 500, 600, 700, 800, 900];
-var TYPE = ['palace', 'flat', 'bungalo', 'house'];
-var ROOMS = [2, 4, 8, 5];
-var GUESTS = [1, 2, 3, 4];
-var CHECKIN = ['12:00', '12:30', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
-var CHECKOUT = ['14:00', '15:00', '13:00', '11:00', '17:00', '10:00', '10:30', '12:30'];
-var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var DESCRIPTON = ['about', 'about2', 'about3', 'about4', 'about5', 'about6', 'about7', 'about8'];
-var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var LOCATION = [7, 5];
+var TITLES = [
+  'отель1',
+  'отель2',
+  'отель3',
+  'отель4',
+  'отель5',
+  'отель6',
+  'отель7',
+  'отель8',
+];
+var TYPES = ['palace', 'flat', 'bungalo', 'house'];
+var CHECKIN = ['12:00', '13:00', '14:00'];
+var CHECKOUT = ['12:00', '13:00', '14:00'];
+var DESCRIPTONS = [
+  'about',
+  'about2',
+  'about3',
+  'about4',
+  'about5',
+  'about6',
+  'about7',
+  'about8',
+];
+var FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner',
+];
+var PHOTOS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
+];
+var PIN_WIDTH = 62;
+var PIN_HEIGHT = 22;
 
 var objects = [];
 
-var createNewObj = function (avatar, title, address, price, type, rooms, guests, checkin, checkout, features, description, photos, location) {
-  return {
-    author: {avatar: avatar},
-    offer: {
-      title: title,
-      address: address,
-      price: price,
-      type: type,
-      rooms: rooms,
-      guests: guests,
-      checkin: checkin,
-      checkout: checkout,
-      features: features,
-      description: description,
-      photos: photos
-    },
-    location: {
-      x: '',
-      y: ''
-    }
-  };
-};
+function generateRandomNumberFromInterval(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
 
+function generateRandomStringFromArray(array) {
+  var randomArray = [];
+  var randomCount = Math.ceil(Math.random() * array.length);
 
-var createArrObjects = function (arrLength, avatarProp, titleProp, addressProp, priceProp, typeProp, roomsProp, guestsProp, checkinProp, checkoutProp, featuresProp, descriptionProp, photosProp) {
-  for (var i = 0; i < arrLength; i++) {
-    var avatar = avatarProp[i];
-    var title = titleProp[i];
-    var address = addressProp[i];
-    var price = priceProp[Math.floor(Math.random() * 8)];
-    var type = typeProp[Math.floor(Math.random() * 4)];
-    var rooms = roomsProp[Math.floor(Math.random() * 4)];
-    var guests = guestsProp[Math.floor(Math.random() * 4)];
-    var checkin = checkinProp[Math.floor(Math.random() * 8)];
-    var checkout = checkoutProp[Math.floor(Math.random() * 8)];
-    var features = featuresProp[Math.floor(Math.random() * 6)];
-    var photos = photosProp[Math.floor(Math.random() * 3)];
-    var description = descriptionProp[i];
-    objects.push(createNewObj(avatar, title, address, price, type, rooms, guests, checkin, checkout, features, description, photos));
+  for (var i = 0; i < randomCount; i += 1) {
+    randomArray.push(array[i]);
   }
+
+  return randomArray.toString();
+}
+
+var createNewObjs = function (count) {
+  for (var i = 0; i < count; i += 1) {
+    objects.push({
+      author: {avatar: 'img/avatars/user0' + (i + 1) + '.png'},
+      offer: {
+        title: TITLES[i],
+        address: [
+          generateRandomNumberFromInterval(100, 1000),
+          generateRandomNumberFromInterval(100, 1000),
+        ].toString(),
+        price: generateRandomNumberFromInterval(100, 1000),
+        type: TYPES[generateRandomNumberFromInterval(0, 4)],
+        rooms: generateRandomNumberFromInterval(0, 10),
+        guests: generateRandomNumberFromInterval(0, 10),
+        checkin: CHECKIN[generateRandomNumberFromInterval(0, 3)],
+        checkout: CHECKOUT[generateRandomNumberFromInterval(0, 3)],
+        features: generateRandomStringFromArray(FEATURES),
+        description: DESCRIPTONS[i],
+        photos: generateRandomStringFromArray(PHOTOS),
+      },
+      location: {
+        x: generateRandomNumberFromInterval(100, 980) - PIN_WIDTH / 2,
+        y: generateRandomNumberFromInterval(130, 630) - PIN_HEIGHT,
+      },
+    });
+  }
+  return objects;
 };
 
-createArrObjects(8, AVATAR, TITLE, ADDRESS, PRICE, TYPE, ROOMS, GUESTS, CHECKIN, CHECKOUT, FEATURES, DESCRIPTON, PHOTOS);
-console.log(objects);
+//вторая часть задания DOM
+
+var pin = document.querySelector('.map__pins');
+var fragment = document.createDocumentFragment();
+var pinsArray = [];
+var objectsArray = createNewObjs(8);
+
+function createPinsFromObjects(objects) {
+  for (var i = 0; i < objects.length; i += 1) {
+    var newBtn = document.createElement('button');
+    var img = document.createElement('img');
+    newBtn.className = 'map__pin';
+    newBtn.style.left = objects[i].location.x + 'px';
+    newBtn.style.top = objects[i].location.y + 'px';
+    img.src = objects[i].author.avatar;
+    img.width = 50;
+    img.height = 50;
+    img.alt = objects[i].offer.title;
+    img.style.top = 0;
+    newBtn.appendChild(img);
+    pinsArray.push(newBtn);
+  }
+}
+
+function addedPinsInParentNode(pins) {
+  for (var i = 0; i < pins.length; i += 1) {
+    fragment.appendChild(pins[i]);
+  }
+  pin.appendChild(fragment);
+}
+
+createPinsFromObjects(objectsArray);
+addedPinsInParentNode(pinsArray);
