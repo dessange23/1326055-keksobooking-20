@@ -117,4 +117,3 @@ function addedPinsInParentNode(pins) {
 
 createPinsFromObjects(objectsArray);
 addedPinsInParentNode(pinsArray);
-
